@@ -1,7 +1,6 @@
 package com.vlad.postsreader.jsonplaceholder;
 
 import com.vlad.postsreader.repository.PostRepository;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -53,7 +52,7 @@ class ExternalPostRepository implements PostRepository {
                 .collect(toList());
     }
 
-    public List<Post> fetchPosts() {
+    private List<Post> fetchPosts() {
         return webClient
                 .get()
                 .uri(POSTS_URI)
@@ -63,7 +62,7 @@ class ExternalPostRepository implements PostRepository {
                 .getBody();
     }
 
-    public List<Comment> fetchComments() {
+    private List<Comment> fetchComments() {
         return webClient
                 .get()
                 .uri(COMMENTS_URI)
