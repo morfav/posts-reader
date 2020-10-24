@@ -1,22 +1,14 @@
 package com.vlad.postsreader.post;
 
-import net.minidev.json.annotate.JsonIgnore;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-@Entity
 public class Comment {
 
-    @Id
     private Long id;
 
     private String name;
 
     private String email;
 
-    @Column(columnDefinition="text")
     private String body;
 
     public Long getId() {

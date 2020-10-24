@@ -1,22 +1,13 @@
 package com.vlad.postsreader.post;
 
-import org.hibernate.annotations.LazyCollection;
-
-import javax.persistence.*;
 import java.util.List;
 
 
-@Entity
 public class Post {
 
-    @Id
     private Long id;
     private String title;
     private String body;
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
     private List<Comment> comments;
 
     public String getTitle() {
