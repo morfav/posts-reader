@@ -1,5 +1,6 @@
 package com.vlad.postsreader.jsonplaceholder;
 
+
 class Post {
 
     private long id;
@@ -28,13 +29,5 @@ class Post {
 
     public void setBody(String body) {
         this.body = body;
-    }
-
-    public com.vlad.postsreader.post.Post toPost() {
-        com.vlad.postsreader.post.Post post = new com.vlad.postsreader.post.Post();
-        post.setTitle(title);
-        post.setBody(body);
-        post.setId(id);
-        return post;
     }
 }

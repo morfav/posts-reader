@@ -1,31 +1,30 @@
-package com.vlad.postsreader.jsonplaceholder;
+package com.vlad.postsreader.post;
 
-class Comment {
+import net.minidev.json.annotate.JsonIgnore;
 
-    private long id;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
-    private long postId;
+@Entity
+public class Comment {
+
+    @Id
+    private Long id;
 
     private String name;
 
     private String email;
 
+    @Column(columnDefinition="text")
     private String body;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
-    }
-
-    public long getPostId() {
-        return postId;
-    }
-
-    public void setPostId(long postId) {
-        this.postId = postId;
     }
 
     public String getName() {

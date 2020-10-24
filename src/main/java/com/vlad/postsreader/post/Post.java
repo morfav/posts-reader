@@ -1,7 +1,9 @@
 package com.vlad.postsreader.post;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import org.hibernate.annotations.LazyCollection;
+
+import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
@@ -11,6 +13,11 @@ public class Post {
     private Long id;
     private String title;
     private String body;
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Comment> comments;
 
     public String getTitle() {
         return title;
@@ -34,5 +41,13 @@ public class Post {
 
     public Long getId() {
         return id;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }

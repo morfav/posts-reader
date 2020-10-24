@@ -24,7 +24,7 @@ public class PostController {
 
     @GetMapping("/posts")
     public PagedModel<EntityModel<Post>> all(
-            @PageableDefault(size = 10) Pageable pageable) {
+            @PageableDefault(size = 5) Pageable pageable) {
 
         Page<Post> posts = postService.getAllPosts(pageable);
 
