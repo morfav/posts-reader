@@ -1,7 +1,6 @@
 package com.vlad.postsreader.post;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 
@@ -9,7 +8,6 @@ import javax.persistence.Id;
 public class Post {
 
     @Id
-    @GeneratedValue
     private Long id;
     private String title;
     private String body;

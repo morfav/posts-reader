@@ -34,6 +34,7 @@ class Post {
         com.vlad.postsreader.post.Post post = new com.vlad.postsreader.post.Post();
         post.setTitle(title);
         post.setBody(body);
+        post.setId(id);
         return post;
     }
 }

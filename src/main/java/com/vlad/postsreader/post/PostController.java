@@ -1,7 +1,11 @@
 package com.vlad.postsreader.post;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -9,14 +13,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PostController {
 
-    final PostService postService;
+    private final PostService postService;
 
-    public PostController(PostService postService) {
+    private final PagedResourcesAssembler<Post> pagedResourcesAssembler;
+
+    public PostController(PostService postService, PagedResourcesAssembler<Post> pagedResourcesAssembler) {
         this.postService = postService;
+        this.pagedResourcesAssembler = pagedResourcesAssembler;
     }
 
     @GetMapping("/posts")
-    public Page<Post> all() {
-        return postService.getAllPosts(PageRequest.of(2, 10));
+    public PagedModel<EntityModel<Post>> all(
+            @PageableDefault(size = 10) Pageable pageable) {
+
+        Page<Post> posts = postService.getAllPosts(pageable);
+
+        return pagedResourcesAssembler.toModel(posts);
     }
 }
