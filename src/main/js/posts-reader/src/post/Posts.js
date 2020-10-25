@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import {makeStyles} from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Post from './Post'
@@ -18,7 +17,7 @@ const Posts = () => {
     const setPageData = data => {
         setPosts(data._embedded.posts);
         setPageNumber(data.page.number);
-        const { _links } = data;
+        const {_links} = data;
         setFirstLink(_links.first?.href);
         setPrevLink(_links.prev?.href);
         setNextLink(_links.next?.href);
@@ -32,22 +31,31 @@ const Posts = () => {
             });
     }, [])
 
-    const loading = () => <CircularProgress/>
-
-    return posts ?
+    const loading = <CircularProgress/>
+    const postsList = () => (
         <div>
-            {posts.map(post => <Post key={post.id} title={post.title}/>)}
-            <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
-                <Button onClick={async () => setPageData(await fetchData(firstLink))} disabled={!firstLink}>First</Button>
-                <Button onClick={async () => setPageData(await fetchData(prevLink))} disabled={!prevLink}>Prev</Button>
-            </ButtonGroup>
-            <span style={{padding: '10px'}}>Page: {pageNumber + 1}</span>
-            <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
-                <Button onClick={async () => setPageData(await fetchData(nextLink))} disabled={!nextLink}>Next</Button>
-                <Button onClick={async () => setPageData(await fetchData(lastLink))} disabled={!lastLink}>Last</Button>
-            </ButtonGroup>
+            {posts.map(post => <Post key={post.id} post={post}/>)}
+            <div style={{padding: '15px'}}>
+                <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
+                    <Button onClick={async () => setPageData(await fetchData(firstLink))}
+                            disabled={!firstLink}>First</Button>
+                    <Button onClick={async () => setPageData(await fetchData(prevLink))}
+                            disabled={!prevLink}>Prev</Button>
+                </ButtonGroup>
+                <span style={{padding: '10px'}}>Page: {pageNumber + 1}</span>
+                <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
+                    <Button onClick={async () => setPageData(await fetchData(nextLink))}
+                            disabled={!nextLink}>Next</Button>
+                    <Button onClick={async () => setPageData(await fetchData(lastLink))}
+                            disabled={!lastLink}>Last</Button>
+                </ButtonGroup>
+            </div>
         </div>
-        : loading()
+    )
+
+    return posts
+        ? postsList()
+        : loading
 }
 
 export default Posts;
