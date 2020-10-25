@@ -8,7 +8,9 @@ To launch the client, navigate to ./src/main/js/posts-reader and run:
 then
 ### `npm start`
 
-The back-end was developed using Java 11.
+The back-end was developed using Java 11. It is served on http://localhost:8080/posts
+
+The front-end can be accessed at http://localhost:3000/
 
 I considered the following improvements however did not implement them
 due to time constraints:
