@@ -21,3 +21,5 @@ Add script/mvn plugin which will build the react project and place it in a suita
 so it can be served up by the spring boot container as a static resource
 
 Front end routing
+
+Variable pagination
