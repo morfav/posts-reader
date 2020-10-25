@@ -1,9 +1,10 @@
-package com.vlad.postsreader.jsonplaceholder;
+package com.vlad.postsreader.jsonplaceholderapi;
 
 import com.vlad.postsreader.repository.PostRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -12,8 +13,7 @@ import java.util.Map;
 
 import static java.util.Collections.emptyList;
 import static java.util.Comparator.comparingLong;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 
 @Service
@@ -31,7 +31,7 @@ class ExternalPostRepository implements PostRepository {
 
     @Override
     public Page<com.vlad.postsreader.post.Post> findAll(Pageable pageable) {
-        Map<Long, List<Comment>> postIdToComments = getPostIdToComments();
+        Map<Long, List<CommentExternalDto>> postIdToComments = getPostIdToComments();
 
         List<com.vlad.postsreader.post.Post> posts = getConvertedPosts(postIdToComments);
         return new PageImpl<>(
@@ -42,39 +42,41 @@ class ExternalPostRepository implements PostRepository {
                 posts.size());
     }
 
-    private Map<Long, List<Comment>> getPostIdToComments() {
+    private Map<Long, List<CommentExternalDto>> getPostIdToComments() {
         return fetchComments().stream()
-                .collect(groupingBy(Comment::getPostId));
+                .collect(groupingBy(CommentExternalDto::getPostId));
     }
 
-    private List<com.vlad.postsreader.post.Post> getConvertedPosts(Map<Long, List<Comment>> postIdToComments) {
+    private List<com.vlad.postsreader.post.Post> getConvertedPosts(Map<Long, List<CommentExternalDto>> postIdToComments) {
         return fetchPosts().stream()
-                .sorted(comparingLong(Post::getId))
-                .map(post -> DataAdapter.toPost(
-                        post,
-                        postIdToComments.getOrDefault(post.getId(), emptyList())
+                .sorted(comparingLong(PostExternalDto::getId))
+                .map(postExternalDto -> DataAdapter.toPost(
+                        postExternalDto,
+                        postIdToComments.getOrDefault(postExternalDto.getId(), emptyList())
                 ))
                 .collect(toList());
     }
 
-    private List<Post> fetchPosts() {
-        return webClient
-                .get()
-                .uri(POSTS_URI)
-                .retrieve()
-                .toEntityList(Post.class)
-                .block()
-                .getBody();
+    private List<PostExternalDto> fetchPosts() {
+        return fetchList(POSTS_URI, PostExternalDto.class);
     }
 
-    private List<Comment> fetchComments() {
-        return webClient
+    private List<CommentExternalDto> fetchComments() {
+        return fetchList(COMMENTS_URI, CommentExternalDto.class);
+    }
+
+    private <T> List<T> fetchList(String uri, Class<T> objectClass) {
+        ResponseEntity<List<T>> response = webClient
                 .get()
-                .uri(COMMENTS_URI)
+                .uri(uri)
                 .retrieve()
-                .toEntityList(Comment.class)
-                .block()
-                .getBody();
+                .toEntityList(objectClass)
+                .block();
+
+        if (response != null) {
+            return response.getBody();
+        }
+        return emptyList();
     }
 
 }

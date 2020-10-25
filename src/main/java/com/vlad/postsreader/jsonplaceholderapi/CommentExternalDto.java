@@ -1,6 +1,6 @@
-package com.vlad.postsreader.jsonplaceholder;
+package com.vlad.postsreader.jsonplaceholderapi;
 
-class Comment {
+class CommentExternalDto {
 
     private long id;
 

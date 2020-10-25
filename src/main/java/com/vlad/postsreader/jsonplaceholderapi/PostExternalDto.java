@@ -1,7 +1,7 @@
-package com.vlad.postsreader.jsonplaceholder;
+package com.vlad.postsreader.jsonplaceholderapi;
 
 
-class Post {
+class PostExternalDto {
 
     private long id;
     private String title;
