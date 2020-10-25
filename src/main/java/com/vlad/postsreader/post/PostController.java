@@ -6,6 +6,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +24,7 @@ public class PostController {
     }
 
     @GetMapping("/posts")
+    @CrossOrigin(origins = "http://localhost:3000")
     public PagedModel<EntityModel<Post>> all(
             @PageableDefault(size = 5) Pageable pageable) {
 
