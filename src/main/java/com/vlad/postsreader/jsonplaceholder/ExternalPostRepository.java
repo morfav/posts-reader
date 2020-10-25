@@ -34,7 +34,12 @@ class ExternalPostRepository implements PostRepository {
         Map<Long, List<Comment>> postIdToComments = getPostIdToComments();
 
         List<com.vlad.postsreader.post.Post> posts = getConvertedPosts(postIdToComments);
-        return new PageImpl<>(posts, pageable, posts.size());
+        return new PageImpl<>(
+                posts.subList(
+                        (int) pageable.getOffset(),
+                        (int) Math.min(pageable.getOffset() + pageable.getPageSize(), posts.size())),
+                pageable,
+                posts.size());
     }
 
     private Map<Long, List<Comment>> getPostIdToComments() {

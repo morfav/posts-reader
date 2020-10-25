@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from 'react'
 
 import Post from './Post'
+import {fetchFirstPageData} from "./Api";
 
 const Posts = () => {
     const [posts, setPosts] = useState(undefined);
 
     useEffect(() => {
-        const fetchData = async () => {
-            const apiUrl = 'http://localhost:8080/posts';
-            const response = await fetch(apiUrl);
-            const data = await response.json();
-            setPosts(data._embedded.posts);
-        }
-        fetchData();
+        fetchFirstPageData()
+            .then(data => setPosts(data._embedded.posts));
     }, [])
 
     return (posts ? posts.map(post => <Post key={post.id} title={post.title}/>) : 'loading')
